@@ -40,7 +40,7 @@ func vote(w http.ResponseWriter, r *http.Request) {
 
 	if (num < 0) {
 		// マイナスはありえないのでそのまま返す
-		writeResponse(w, name)
+		writeResponse(c, w, name)
 	} else if (1000 < num) {
 		num = 1000
 	}
@@ -57,7 +57,7 @@ func vote(w http.ResponseWriter, r *http.Request) {
 	datastore.Put(c, key, &temp)
 
 	// レスポンスを返す
-	writeResponse(w, name)
+	writeResponse(c, w, name)
 }
 
 /**
@@ -75,7 +75,7 @@ func getVotes(w http.ResponseWriter, r *http.Request) {
 	updateCandidatesByName(c, name)
 
 	// レスポンスを返す
-	writeResponse(w, name);
+	writeResponse(c, w, name);
 }
 
 func updateCandidatesByName(c context.Context, name string) {
@@ -101,8 +101,8 @@ func updateCandidatesByName(c context.Context, name string) {
 	}
 }
 
-func writeResponse(w http.ResponseWriter, name string) {
+func writeResponse(c context.Context, w http.ResponseWriter, name string) {
 	// レスポンスを返す
-	updateCandidatesByName()
+	updateCandidatesByName(c, name)
 	fmt.Fprint(w, "{\"response\": {\"name\": \"" + name + "\", \"votes\": " + strconv.Itoa(candidatesMap[name]) + "}}")
 }
