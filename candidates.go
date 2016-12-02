@@ -39,7 +39,8 @@ func vote(w http.ResponseWriter, r *http.Request) {
 	num, _ := strconv.Atoi(r.URL.Query().Get("num"))
 
 	if (num < 0) {
-		writeResponse(name)
+		// マイナスはありえないのでそのまま返す
+		writeResponse(w, name)
 	} else if (1000 < num) {
 		num = 1000
 	}
@@ -56,7 +57,7 @@ func vote(w http.ResponseWriter, r *http.Request) {
 	datastore.Put(c, key, &temp)
 
 	// レスポンスを返す
-	writeResponse(name)
+	writeResponse(w, name)
 }
 
 /**
@@ -74,7 +75,7 @@ func getVotes(w http.ResponseWriter, r *http.Request) {
 	updateCandidatesByName(c, name)
 
 	// レスポンスを返す
-	writeResponse(name);
+	writeResponse(w, name);
 }
 
 func updateCandidatesByName(c context.Context, name string) {
@@ -100,7 +101,7 @@ func updateCandidatesByName(c context.Context, name string) {
 	}
 }
 
-func writeResponse(name string) {
+func writeResponse(w http.ResponseWriter, name string) {
 	// レスポンスを返す
 	updateCandidatesByName()
 	fmt.Fprint(w, "{\"response\": {\"name\": \"" + name + "\", \"votes\": " + strconv.Itoa(candidatesMap[name]) + "}}")
