@@ -37,6 +37,13 @@ func vote(w http.ResponseWriter, r *http.Request) {
 
 	// 投票する票数を取得
 	num, _ := strconv.Atoi(r.URL.Query().Get("num"))
+
+	if (num < 0) {
+		return
+	} else if (1000 < num) {
+		num = 1000
+	}
+
 	candidatesMap[name] = candidatesMap[name] + num
 
 	// 投票処理
@@ -47,7 +54,7 @@ func vote(w http.ResponseWriter, r *http.Request) {
 	// アクセスキーを取得
 	key := datastore.NewKey(c, "Candidates", name, 0, nil)
 	datastore.Put(c, key, &temp)
-	
+
 	// レスポンスを返す
 	fmt.Fprint(w, "{\"response\": {\"name\": \"" + name + "\", \"votes\": " + strconv.Itoa(candidatesMap[name]) + "}}")
 }
