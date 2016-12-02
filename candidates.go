@@ -47,6 +47,9 @@ func vote(w http.ResponseWriter, r *http.Request) {
 	// アクセスキーを取得
 	key := datastore.NewKey(c, "Candidates", name, 0, nil)
 	datastore.Put(c, key, &temp)
+	
+	// レスポンスを返す
+	fmt.Fprint(w, "{\"response\": {\"name\": \"" + name + "\", \"votes\": " + strconv.Itoa(candidatesMap[name]) + "}}")
 }
 
 /**
