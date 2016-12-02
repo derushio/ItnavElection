@@ -41,6 +41,7 @@ func vote(w http.ResponseWriter, r *http.Request) {
 	if (num < 0) {
 		// マイナスはありえないのでそのまま返す
 		writeResponse(c, w, name)
+		return;
 	} else if (1000 < num) {
 		num = 1000
 	}
